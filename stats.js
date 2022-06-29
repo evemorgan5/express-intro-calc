@@ -30,6 +30,8 @@ function findMode(nums) {
 
 function findMean(nums) {
   if (nums.length === 0) return 0;
+  console.log(nums);
+  debugger;
   return nums.reduce(function (acc, cur) {
     return acc + cur;
   }) / nums.length
