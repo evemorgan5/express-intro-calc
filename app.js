@@ -6,14 +6,13 @@ const app = express();
 const { findMean, findMedian, findMode } = require("./stats");
 const { convertStrNums } = require("./utils");
 
-// useful error class to throw
 const { NotFoundError, BadRequestError } = require("./expressError");
-const internal = require("stream");
 
 const MISSING = "Expected key `nums` with comma-separated list of numbers.";
 
 
-/** Finds mean of nums in qs: returns {operation: "mean", result } */
+/** Finds mean of nums in qs:
+ *  Returns { response: { operation: "mode", value: result }} */
 app.get("/mean", function (req, res) {
 
   if (!(req.query.nums)) {
@@ -27,7 +26,8 @@ app.get("/mean", function (req, res) {
   return res.json({ response: { operation: "mean", value: mean, } });
 });
 
-/** Finds median of nums in qs: returns {operation: "median", result } */
+/** Finds median of nums in qs:
+ *  Returns { response: { operation: "mode", value: result }} */
 app.get("/median", function (req, res) {
 
   if (!(req.query.nums)) {
@@ -36,13 +36,14 @@ app.get("/median", function (req, res) {
 
   const nums = req.query.nums.split(",");
   const newNums = convertStrNums(nums);
-  const mean = findMedian(newNums);
+  const median = findMedian(newNums);
 
-  return res.json({ response: { operation: "median", value: mean, } });
+  return res.json({ response: { operation: "median", value: median, } });
 });
 
 
-/** Finds mode of nums in qs: returns {operation: "mean", result } */
+/** Finds mode of nums in qs:
+ *  Returns { response: { operation: "mode", value: result }} */
 app.get("/mode", function (req, res) {
 
   if (!(req.query.nums)) {
@@ -51,10 +52,11 @@ app.get("/mode", function (req, res) {
 
   const nums = req.query.nums.split(",");
   const newNums = convertStrNums(nums);
-  const mean = findMode(newNums);
+  const mode = findMode(newNums);
 
-  return res.json({ response: { operation: "mode", value: mean, } });
+  return res.json({ response: { operation: "mode", value: mode, } });
 });
+
 
 /** 404 handler: matches unmatched routes; raises NotFoundError. */
 app.use(function (req, res, next) {
